@@ -18,8 +18,8 @@ func _ready():
 	_err = connect("changePlayer", get_node("/root/Main"), "change_player")
 
 func _on_area_entered(area):
-	print(area.get_parent().speed)
-	if area.get_parent().speed > 0:
+	var object = area.get_parent()
+	if object.speed > 0 && object.gameplayType == "Slide":
 		# Deactivate active switchbox(es) and active current switchbox(es)
 		get_tree().call_group("switchBoxes", "deactivate_box")
 		get_tree().call_group("switchBoxes" + playerType, "activate_box")

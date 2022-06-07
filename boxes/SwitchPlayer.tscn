@@ -16,26 +16,11 @@
 [ext_resource path="res://assets/sprites/boxes/triangleOn.png" type="Texture" id=14]
 [ext_resource path="res://assets/sprites/boxes/squareOff.png" type="Texture" id=15]
 
-[sub_resource type="RectangleShape2D" id=2]
+[sub_resource type="RectangleShape2D" id=1]
 extents = Vector2( 8, 8 )
 
-[sub_resource type="SpriteFrames" id=3]
+[sub_resource type="SpriteFrames" id=2]
 animations = [ {
-"frames": [ ExtResource( 7 ) ],
-"loop": true,
-"name": "LeftOff",
-"speed": 5.0
-}, {
-"frames": [ ExtResource( 9 ) ],
-"loop": true,
-"name": "BottomOff",
-"speed": 5.0
-}, {
-"frames": [ ExtResource( 3 ) ],
-"loop": true,
-"name": "TopOff",
-"speed": 5.0
-}, {
 "frames": [ ExtResource( 8 ) ],
 "loop": true,
 "name": "BottomOn",
@@ -51,27 +36,37 @@ animations = [ {
 "name": "TopOn",
 "speed": 5.0
 }, {
-"frames": [ ExtResource( 4 ) ],
+"frames": [ ExtResource( 3 ) ],
 "loop": true,
-"name": "RightOff",
+"name": "TopOff",
 "speed": 5.0
 }, {
 "frames": [ ExtResource( 2 ) ],
 "loop": true,
 "name": "RightOn",
 "speed": 5.0
+}, {
+"frames": [ ExtResource( 4 ) ],
+"loop": true,
+"name": "RightOff",
+"speed": 5.0
+}, {
+"frames": [ ExtResource( 9 ) ],
+"loop": true,
+"name": "BottomOff",
+"speed": 5.0
+}, {
+"frames": [ ExtResource( 7 ) ],
+"loop": true,
+"name": "LeftOff",
+"speed": 5.0
 } ]
 
-[sub_resource type="SpriteFrames" id=4]
+[sub_resource type="SpriteFrames" id=3]
 animations = [ {
 "frames": [ ExtResource( 12 ) ],
 "loop": true,
 "name": "SquareOn",
-"speed": 5.0
-}, {
-"frames": [ ExtResource( 11 ) ],
-"loop": true,
-"name": "CircleOn",
 "speed": 5.0
 }, {
 "frames": [ ExtResource( 10 ) ],
@@ -93,9 +88,14 @@ animations = [ {
 "loop": true,
 "name": "SquareOff",
 "speed": 5.0
+}, {
+"frames": [ ExtResource( 11 ) ],
+"loop": true,
+"name": "CircleOn",
+"speed": 5.0
 } ]
 
-[sub_resource type="RectangleShape2D" id=1]
+[sub_resource type="RectangleShape2D" id=4]
 extents = Vector2( 8, 8 )
 
 [node name="SwitchPlayer" type="Area2D"]
@@ -106,16 +106,17 @@ script = ExtResource( 1 )
 [node name="StaticBody2D" type="StaticBody2D" parent="."]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D"]
-shape = SubResource( 2 )
+shape = SubResource( 1 )
 
 [node name="BlocSprite" type="AnimatedSprite" parent="."]
-frames = SubResource( 3 )
+frames = SubResource( 2 )
 animation = "LeftOn"
 
 [node name="ShapeSprite" type="AnimatedSprite" parent="."]
-frames = SubResource( 4 )
+frames = SubResource( 3 )
 animation = "SquareOff"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-shape = SubResource( 1 )
+shape = SubResource( 4 )
+
 [connection signal="area_entered" from="." to="." method="_on_area_entered"]
