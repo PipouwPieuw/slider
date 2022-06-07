@@ -18,7 +18,6 @@ func _ready():
 	_err = connect("changePlayer", get_node("/root/Main"), "change_player")
 
 func _on_area_entered(area):
-	print(area.get_parent().speed)
 	if area.get_parent().speed > 0:
 		# Deactivate active switchbox(es) and active current switchbox(es)
 		get_tree().call_group("switchBoxes", "deactivate_box")
