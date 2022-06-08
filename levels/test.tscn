@@ -29,24 +29,24 @@ position = Vector2( 120, 168 )
 playerType = "Triangle"
 
 [node name="Movable" parent="." index="6"]
-position = Vector2( 136, 120 )
+position = Vector2( 120, 120 )
 
 [node name="Movable2" parent="." index="7" instance=ExtResource( 2 )]
-position = Vector2( 232, 136 )
-blocType = "Circle"
+position = Vector2( 296, 24 )
+blockType = "Circle"
 
 [node name="Movable3" parent="." index="8" instance=ExtResource( 2 )]
-position = Vector2( 200, 72 )
-blocType = "Triangle"
+position = Vector2( 184, 56 )
+blockType = "Triangle"
 
 [node name="Pushable" parent="." index="9" instance=ExtResource( 4 )]
-position = Vector2( 168, 24 )
+position = Vector2( 120, 136 )
 
 [node name="Pushable2" parent="." index="10" instance=ExtResource( 4 )]
 position = Vector2( 56, 24 )
 
 [node name="Pushable3" parent="." index="11" instance=ExtResource( 4 )]
-position = Vector2( 120, 24 )
+position = Vector2( 104, 24 )
 
 [node name="Pushable4" parent="." index="12" instance=ExtResource( 4 )]
-position = Vector2( 232, 72 )
+position = Vector2( 232, 120 )

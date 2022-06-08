@@ -4,7 +4,6 @@
 [ext_resource path="res://entities/blocks/Movable.tscn" type="PackedScene" id=2]
 [ext_resource path="res://levels/Template.tscn" type="PackedScene" id=3]
 
-
 [node name="Level" instance=ExtResource( 3 )]
 
 [node name="TileMap" parent="." index="0"]
@@ -27,4 +26,4 @@ position = Vector2( 40, 40 )
 
 [node name="Movable2" parent="." index="5" instance=ExtResource( 2 )]
 position = Vector2( 40, 136 )
-blocType = "Circle"
+blockType = "Circle"

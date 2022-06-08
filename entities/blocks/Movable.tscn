@@ -13,11 +13,6 @@
 
 [sub_resource type="SpriteFrames" id=1]
 animations = [ {
-"frames": [ ExtResource( 3 ), ExtResource( 10 ) ],
-"loop": true,
-"name": "SquareOn",
-"speed": 1.0
-}, {
 "frames": [ ExtResource( 1 ) ],
 "loop": true,
 "name": "CircleOff",
@@ -42,6 +37,11 @@ animations = [ {
 "loop": true,
 "name": "TriangleOff",
 "speed": 5.0
+}, {
+"frames": [ ExtResource( 3 ), ExtResource( 10 ) ],
+"loop": true,
+"name": "SquareOn",
+"speed": 1.0
 } ]
 
 [sub_resource type="RectangleShape2D" id=2]

@@ -48,39 +48,40 @@ func _ready():
 func start_moving(dir):
 	if !moving:
 		direction = dir
+		set_active_raycast()
 		match gameplayType:
 			"Slide", "Fall":
-				# Calculate destination point to slide to
-				set_active_raycast()
-				set_target_point_slide()
+				if can_move_slide():
+					# Calculate destination point to slide to
+					set_target_point_slide()
+					move()
 			"Step":
-				add_to_group("awaitingMoveStep")
-				# Calculate destination point to step to
-				set_active_raycast()
-				set_target_point_step()
-		currentPoint = position
-		# Set trigger position
-		trigger.position.x = GRID_STEP * direction[0]
-		trigger.position.y = GRID_STEP * direction[1]
-		add_to_group("isMoving")
-		emit_signal("startMoving")
-		# Start moving
-		moving = true
+				if can_move_step():
+		#			add_to_group("awaitingMoveStep")
+					# Calculate destination point to step to
+					set_target_point_step()
+					move()
+
+func move():
+	currentPoint = position
+	# Set trigger position
+	trigger.position.x = GRID_STEP * direction[0]
+	trigger.position.y = GRID_STEP * direction[1]
+	add_to_group("isMoving")
+	emit_signal("startMoving")
+	# Start moving
+	moving = true
 
 func stop_moving():
 	moving = false
 	speed = 0
+	direction = [0, 0]
 	# Set trigger position
 	trigger.position.x = 0
 	trigger.position.y = 0
 	remove_from_group("isMoving")
 	if get_tree().get_nodes_in_group("isMoving").empty():
 		emit_signal("endMoving")
-	if activeRaycastStep.is_colliding():
-		var collider = activeRaycastStep.get_collider()
-		if(collider.is_in_group("pushables")):
-			collider.start_moving(direction)	
-	direction = [0, 0]
 
 func _physics_process(delta):
 	if moving:
@@ -91,8 +92,13 @@ func _physics_process(delta):
 		position = position.move_toward(targetPoint, speed)
 		# Stop moving if destination reached
 		if position == targetPoint:
+			# If movement ends against pushable block on Slide mode, make it move			
+			activeRaycastStep.force_raycast_update()
+			if gameplayType == "Slide" and activeRaycastStep.is_colliding():
+				var collider = activeRaycastStep.get_collider()
+				if(collider.is_in_group("pushables")):
+					collider.start_moving(direction)
 			stop_moving()
-
 
 func set_active_raycast():
 	if direction[0] == 1:
@@ -108,8 +114,19 @@ func set_active_raycast():
 		activeRaycast = checkCollisionTop
 		activeRaycastStep = checkCollisionStepTop
 
+func can_move_slide():
+	var canMove = true
+	if activeRaycastStep.is_colliding():
+		if !activeRaycastStep.get_collider().is_in_group("movables" + get_block_type()):
+			canMove = false
+	return canMove
+
+func can_move_step():
+	var canMove = false
+	return canMove
+
 func set_target_point_slide():
-	var blocType = get_block_type()
+	var blockType = get_block_type()
 	var collisionPoint = []
 	# Get position of closest obstacle. If movable bloc is on the way,
 	# ignore it and store it for later
@@ -117,7 +134,7 @@ func set_target_point_slide():
 	var colliders = []
 	while !obstacleDetected:
 		var collider = activeRaycast.get_collider()
-		if collider.is_in_group("movables" + blocType):
+		if collider.is_in_group("movables" + blockType):
 			colliders.append(collider)
 			activeRaycast.add_exception(collider)
 			activeRaycast.force_raycast_update()
@@ -140,14 +157,14 @@ func set_target_point_slide():
 	targetPoint = (Vector2(int(round(collisionPoint[0])), int(round(collisionPoint[1]))))
 
 func set_target_point_step():
-	var blocType = get_block_type()
+	var blockType = get_block_type()
 	targetPoint = position
 	if !activeRaycastStep.is_colliding():
 		if direction[0] != 0:
 			targetPoint.x -= -direction[0] * GRID_STEP
 		elif direction[1] != 0:
 			targetPoint.y -= -direction[1] * GRID_STEP
-	elif activeRaycastStep.get_collider().is_in_group("movables" + blocType):
+	elif activeRaycastStep.get_collider().is_in_group("movables" + blockType):
 		var collisionPoint = []
 		var collidersAmount = 0
 		# Get position of closest obstacle. If movable bloc is on the way,
@@ -156,7 +173,7 @@ func set_target_point_step():
 		var colliders = []
 		while !obstacleDetected:
 			var collider = activeRaycast.get_collider()
-			if collider.is_in_group("movables" + blocType):
+			if collider.is_in_group("movables" + blockType):
 				colliders.append(collider)
 				activeRaycast.add_exception(collider)
 				activeRaycast.force_raycast_update()
@@ -185,10 +202,10 @@ func set_target_point_step():
 				targetPoint[1] = position.y + GRID_STEP
 		elif direction[1] == -1:
 			if position.y - (collidersAmount * GRID_STEP) > collisionPoint[1]:
-				targetPoint[1] = position.y - GRID_STEP
+				targetPoint[1] = position.y - GRID_STEP	
 
 func get_block_type():
 	if is_in_group("movables"):
-		return self.blocType
+		return self.blockType
 	else:
 		return "Static"

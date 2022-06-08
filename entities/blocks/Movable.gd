@@ -1,14 +1,14 @@
 extends "res://entities/blocks/KineticBlock.gd"
 
-export(String, "Square", "Circle", "Triangle") var blocType = "Square"
+export(String, "Square", "Circle", "Triangle") var blockType = "Square"
 
 func _ready():
-	sprite.animation = blocType + "Off"
+	sprite.animation = blockType + "Off"
 	add_to_group("movables")
-	add_to_group("movables" + blocType)
+	add_to_group("movables" + blockType)
 
 func activate_movable():
-	sprite.animation = blocType + "On"
+	sprite.animation = blockType + "On"
 
 func deactivate_movable():
-	sprite.animation = blocType + "Off"
+	sprite.animation = blockType + "Off"
