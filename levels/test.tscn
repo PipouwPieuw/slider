@@ -1,8 +1,9 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=5 format=2]
 
 [ext_resource path="res://levels/Template.tscn" type="PackedScene" id=1]
-[ext_resource path="res://entities/blocs/Movable.tscn" type="PackedScene" id=2]
+[ext_resource path="res://entities/blocks/Movable.tscn" type="PackedScene" id=2]
 [ext_resource path="res://boxes/SwitchPlayer.tscn" type="PackedScene" id=3]
+[ext_resource path="res://entities/blocks/Pushable.tscn" type="PackedScene" id=4]
 
 [node name="Level" instance=ExtResource( 1 )]
 
@@ -31,9 +32,21 @@ playerType = "Triangle"
 position = Vector2( 136, 120 )
 
 [node name="Movable2" parent="." index="7" instance=ExtResource( 2 )]
-position = Vector2( 232, 104 )
+position = Vector2( 232, 136 )
 blocType = "Circle"
 
 [node name="Movable3" parent="." index="8" instance=ExtResource( 2 )]
 position = Vector2( 200, 72 )
 blocType = "Triangle"
+
+[node name="Pushable" parent="." index="9" instance=ExtResource( 4 )]
+position = Vector2( 168, 24 )
+
+[node name="Pushable2" parent="." index="10" instance=ExtResource( 4 )]
+position = Vector2( 56, 24 )
+
+[node name="Pushable3" parent="." index="11" instance=ExtResource( 4 )]
+position = Vector2( 120, 24 )
+
+[node name="Pushable4" parent="." index="12" instance=ExtResource( 4 )]
+position = Vector2( 232, 72 )

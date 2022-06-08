@@ -26,7 +26,7 @@ func _physics_process(_delta):
 			move_objects("movables" + playerType, [0, 1])
 
 func move_objects(groupName, dir):
-	get_tree().call_group(groupName, "startMoving", dir)
+	get_tree().call_group(groupName, "start_moving", dir)
 
 func change_player(type):
 	playerType = type
