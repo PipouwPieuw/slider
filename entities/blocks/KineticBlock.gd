@@ -25,7 +25,7 @@ var direction = [0, 0]
 var activeRaycast
 var activeRaycastStep
 var currentPoint = []
-var targetPoint = []
+var targetPoint = position
 var speed = 0
 var viewportSize
 var _err
@@ -57,7 +57,7 @@ func start_moving(dir):
 					move()
 			"Step":
 				if can_move_step():
-		#			add_to_group("awaitingMoveStep")
+					# add_to_group("awaitingMoveStep")
 					# Calculate destination point to step to
 					set_target_point_step()
 					move()
@@ -122,7 +122,11 @@ func can_move_slide():
 	return canMove
 
 func can_move_step():
-	var canMove = false
+	var canMove = true
+	if activeRaycastStep.is_colliding():
+		if !activeRaycastStep.get_collider().is_in_group("movables" + get_block_type()):
+			if !activeRaycastStep.get_collider().is_in_group("pushables"):
+				canMove = false
 	return canMove
 
 func set_target_point_slide():
@@ -164,45 +168,59 @@ func set_target_point_step():
 			targetPoint.x -= -direction[0] * GRID_STEP
 		elif direction[1] != 0:
 			targetPoint.y -= -direction[1] * GRID_STEP
-	elif activeRaycastStep.get_collider().is_in_group("movables" + blockType):
-		var collisionPoint = []
-		var collidersAmount = 0
-		# Get position of closest obstacle. If movable bloc is on the way,
-		# ignore it and store it for later
-		var obstacleDetected = false
-		var colliders = []
-		while !obstacleDetected:
-			var collider = activeRaycast.get_collider()
-			if collider.is_in_group("movables" + blockType):
-				colliders.append(collider)
-				activeRaycast.add_exception(collider)
-				activeRaycast.force_raycast_update()
-				collidersAmount += 1
-			else:
-				collisionPoint = activeRaycast.get_collision_point()
-				# Set collision point offset to snap to grid
+	else:
+		var closestCollider = activeRaycastStep.get_collider()
+		if closestCollider.is_in_group("movables" + blockType):
+			var collisionPoint = []
+			var collidersAmount = 0
+			# Get position of closest obstacle. If movable bloc is on the way,
+			# ignore it and store it for later
+			var obstacleDetected = false
+			var colliders = []
+			while !obstacleDetected:
+				var collider = activeRaycast.get_collider()
+				if collider.is_in_group("movables" + blockType):
+					colliders.append(collider)
+					activeRaycast.add_exception(collider)
+					activeRaycast.force_raycast_update()
+					collidersAmount += 1
+				else:
+					collisionPoint = activeRaycast.get_collision_point()
+					# Set collision point offset to snap to grid
+					if direction[0] != 0:
+						collisionPoint[0] += -direction[0] * GRID_STEP / 2.0
+					elif direction[1] != 0:
+						collisionPoint[1] += -direction[1] * GRID_STEP / 2.0
+					obstacleDetected = true
+			# Remove current raycast exceptions
+			for collider in colliders:
+				activeRaycast.remove_exception(collider)
+			# Set target point
+			targetPoint = position
+			if direction[0] == 1:
+				if position.x + (collidersAmount * GRID_STEP) < collisionPoint[0]:
+					targetPoint[0] = position.x + GRID_STEP
+			elif direction[0] == -1:
+				if position.x - (collidersAmount * GRID_STEP) > collisionPoint[0]: 
+					targetPoint[0] = position.x - GRID_STEP
+			elif direction[1] == 1:
+				if position.y + (collidersAmount * GRID_STEP) < collisionPoint[1]:
+					targetPoint[1] = position.y + GRID_STEP
+			elif direction[1] == -1:
+				if position.y - (collidersAmount * GRID_STEP) > collisionPoint[1]:
+					targetPoint[1] = position.y - GRID_STEP
+		elif closestCollider.is_in_group("pushables"):
+			closestCollider.direction = direction
+			closestCollider.set_active_raycast()
+			if(!closestCollider.activeRaycastStep.is_colliding()):
+				closestCollider.targetPoint = closestCollider.position
 				if direction[0] != 0:
-					collisionPoint[0] += -direction[0] * GRID_STEP / 2.0
+					targetPoint.x -= -direction[0] * GRID_STEP
+					closestCollider.targetPoint.x -= -direction[0] * GRID_STEP
 				elif direction[1] != 0:
-					collisionPoint[1] += -direction[1] * GRID_STEP / 2.0
-				obstacleDetected = true
-		# Remove current raycast exceptions
-		for collider in colliders:
-			activeRaycast.remove_exception(collider)
-		# Set target point
-		targetPoint = position
-		if direction[0] == 1:
-			if position.x + (collidersAmount * GRID_STEP) < collisionPoint[0]:
-				targetPoint[0] = position.x + GRID_STEP
-		elif direction[0] == -1:
-			if position.x - (collidersAmount * GRID_STEP) > collisionPoint[0]: 
-				targetPoint[0] = position.x - GRID_STEP
-		elif direction[1] == 1:
-			if position.y + (collidersAmount * GRID_STEP) < collisionPoint[1]:
-				targetPoint[1] = position.y + GRID_STEP
-		elif direction[1] == -1:
-			if position.y - (collidersAmount * GRID_STEP) > collisionPoint[1]:
-				targetPoint[1] = position.y - GRID_STEP	
+					targetPoint.y -= -direction[1] * GRID_STEP
+					closestCollider.targetPoint.y -= -direction[1] * GRID_STEP
+				closestCollider.move()
 
 func get_block_type():
 	if is_in_group("movables"):

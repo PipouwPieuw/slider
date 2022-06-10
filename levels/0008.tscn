@@ -20,3 +20,6 @@ position = Vector2( 168, 120 )
 
 [node name="Pushable" parent="." instance=ExtResource( 5 )]
 position = Vector2( 248, 56 )
+
+[node name="Pushable2" parent="." instance=ExtResource( 5 )]
+position = Vector2( 56, 120 )

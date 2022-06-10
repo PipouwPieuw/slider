@@ -11,7 +11,7 @@ tile_data = PoolIntArray( 0, 1, 0, 1, 1, 0, 2, 1, 0, 3, 1, 0, 4, 1, 0, 5, 1, 0, 
 
 [node name="WinBox" parent="." index="1"]
 position = Vector2( 280, 56 )
-targetLevel = "0007"
+targetLevel = "0008"
 
 [node name="SwitchPlayer" parent="." index="2" instance=ExtResource( 2 )]
 position = Vector2( 8, 40 )
