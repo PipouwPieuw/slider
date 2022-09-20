@@ -4,9 +4,9 @@ signal startMoving
 signal endMoving
 
 const TARGET_FPS = 60
-const MAX_SPEED = 16
-const ACCELERATION = 32
-const GRID_STEP = 16
+const MAX_SPEED = 32
+const ACCELERATION = 64
+const GRID_STEP = 32
 
 onready var trigger = $Trigger
 onready var sprite = $Sprite

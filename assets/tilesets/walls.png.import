@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/Player.png-e589e73e3bcf93afdbd52739624fb792.stex"
+path="res://.import/walls.png-b7b9eb4546adbe3ddc6863ca050b4a84.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/sprites/Player.png"
-dest_files=[ "res://.import/Player.png-e589e73e3bcf93afdbd52739624fb792.stex" ]
+source_file="res://assets/tilesets/walls.png"
+dest_files=[ "res://.import/walls.png-b7b9eb4546adbe3ddc6863ca050b4a84.stex" ]
 
 [params]
 
@@ -30,5 +30,5 @@ process/HDR_as_SRGB=false
 process/invert_color=false
 stream=false
 size_limit=0
-detect_3d=true
+detect_3d=false
 svg/scale=1.0
